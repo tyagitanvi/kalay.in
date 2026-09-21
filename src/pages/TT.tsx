@@ -50,6 +50,7 @@ import {
 
 // Replace with your actual profile image asset
 import profileImg from "../assets/profile.png";
+import { ConstellationBackground } from "../animation/constellation";
 
 const ACCENT_OPTIONS = [
   {
@@ -1164,6 +1165,7 @@ function MyProfile() {
 
   return (
     <div className="min-h-screen bg-[#050811] font-['Nunito_Sans'] text-slate-100 selection:bg-[#FF8A00] selection:text-black overflow-x-hidden relative cursor-default">
+     <ConstellationBackground/>
       {/* Dynamic Glow Cursor Follower */}
       <motion.div
         className="fixed w-44 h-44 rounded-full bg-[#FF8A00]/10 blur-3xl pointer-events-none z-50 -translate-x-1/2 -translate-y-1/2 hidden md:block"
