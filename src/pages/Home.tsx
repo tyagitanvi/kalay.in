@@ -233,7 +233,7 @@ const Home = () => {
         <div className="nav-links">
           {/* <a href="#work">WORK</a>
           <a href="#lab">LAB</a> */}
-          <a href="/profile">PROFILE</a>
+          <a href="/ME">PROFILE</a>
         </div>
       </nav>
 
@@ -263,7 +263,7 @@ const Home = () => {
             <span>↗</span>
           </a> */}
 
-          <a href="/profile" className="primary-button">
+          <a href="/ME" className="primary-button">
             Meet me
           </a>
         </div>
