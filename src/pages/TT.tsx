@@ -38,6 +38,7 @@ import {
   Atom,
   Flame,
   Layout,
+  Globe,
 } from "lucide-react";
 import {
   motion,
@@ -974,7 +975,7 @@ function MyProfile() {
 
   const section_list = [
     "about",
-    "ui-lab",
+    // "ui-lab",
     "interactive-lab",
     "skills",
     "experience",
@@ -994,12 +995,12 @@ function MyProfile() {
       icon: <Layers className="text-emerald-400" size={18} />,
     },
     {
-      label: "Client Stakeholders Aligned",
-      value: "Cross-Func",
-      icon: <Briefcase className="text-emerald-400" size={18} />,
+      label: "Client Stakeholders",
+      value: "Global",
+      icon: <Globe className="text-emerald-400" size={18} />,
     },
     {
-      label: "Engineers Mentored / Led",
+      label: "Total Engineers Mentored",
       value: "50+",
       icon: <Users className="text-emerald-400" size={18} />,
     },
@@ -1039,7 +1040,7 @@ function MyProfile() {
       "Docker",
       "Kubernetes",
       "Azure",
-      "Air-gapped Deployments",
+      "Air-gapped systems",
       "CI/CD Pipelines",
       "Firebase",
     ],
@@ -1162,6 +1163,79 @@ function MyProfile() {
       setIsMenuOpen(false);
     }
   };
+
+
+    const [activeEngine, setActiveEngine] = useState<
+    "spring" | "framer" | "tailwind" | "radix"
+  >("spring");
+
+  const [isTriggered, setIsTriggered] = useState(false);
+  const [springStiffness, setSpringStiffness] = useState(180);
+  const [springDamping, setSpringDamping] = useState(12);
+
+  const [layoutExpanded, setLayoutExpanded] = useState(false);
+  const [requestState, setRequestState] = useState<
+    "idle" | "request" | "processing" | "response"
+  >("idle");
+
+  const [progress, setProgress] = useState(35);
+  const [themeAccent, setThemeAccent] = useState("orange");
+
+  const springScale = useSpring(
+    isTriggered ? 1.35 : 1,
+    {
+      stiffness: springStiffness,
+      damping: springDamping,
+    }
+  );
+
+  const springRotate = useSpring(
+    isTriggered ? 180 : 0,
+    {
+      stiffness: springStiffness,
+      damping: springDamping,
+    }
+  );
+
+  const triggerRequest = async () => {
+    if (requestState !== "idle") return;
+
+    setRequestState("request");
+
+    await new Promise((r) => setTimeout(r, 500));
+    setRequestState("processing");
+
+    await new Promise((r) => setTimeout(r, 900));
+    setRequestState("response");
+
+    await new Promise((r) => setTimeout(r, 700));
+    setRequestState("idle");
+  };
+
+  const runProgress = () => {
+    const values = [20, 85, 45, 100];
+
+    values.forEach((value, index) => {
+      setTimeout(() => {
+        setProgress(value);
+      }, index * 700);
+    });
+  };
+
+  const accentMap: Record<string, string> = {
+    orange: "from-orange-500 to-amber-400",
+    cyan: "from-cyan-400 to-blue-500",
+    emerald: "from-emerald-400 to-green-500",
+    violet: "from-violet-500 to-purple-500",
+  };
+
+  const stateLabels = {
+    idle: "IDLE",
+    request: "REQUEST SENT",
+    processing: "PROCESSING",
+    response: "RESPONSE RECEIVED",
+  };
+
 
   return (
     <div className="min-h-screen bg-[#050811] font-['Nunito_Sans'] text-slate-100 selection:bg-[#FF8A00] selection:text-black overflow-x-hidden relative cursor-default">
@@ -1327,8 +1401,8 @@ function MyProfile() {
             <div className="pt-4 flex flex-col sm:flex-row items-center gap-6 justify-center md:justify-start">
               <MagneticButton>
                 <button
-                  onClick={() => scrollToSection("ui-lab")}
-                  className="w-full sm:w-auto bg-gradient-to-r from-[#FF8A00] to-orange-600 text-slate-950 px-8 py-4 rounded-2xl font-black shadow-xl shadow-orange-500/25 hover:brightness-110 transition-all flex items-center justify-center gap-2"
+                  onClick={() => scrollToSection("interactive-lab")}
+                  className="w-full sm:w-auto bg-gradient-to-r from-[#FF8A00] to-orange-600 text-slate-950 px-8 py-4 rounded-2xl font-black shadow-xl shadow-orange-500/25 hover:brightness-110 transition-all flex items-center justify-center gap-2 animate-pulse"
                 >
                   <span>Explore UI Lab</span>
                   <ArrowUpRight size={18} />
@@ -1386,27 +1460,647 @@ function MyProfile() {
       </section>
 
       {/* --- REACT UI & MOTION LAB SECTION --- */}
-      <section
-        id="ui-lab"
-        className="py-20 md:py-24 px-4 bg-slate-900/40 border-y border-white/10 relative z-10"
-      >
-        <div className="max-w-6xl mx-auto space-y-8">
-          <div className="text-center space-y-3">
-            <h2 className="text-3xl md:text-5xl font-black text-white">
-              Interactive React UI Playground
-            </h2>
-            <p className="text-[#FF8A00] font-bold uppercase tracking-widest text-xs md:text-sm">
-              Live Component Physics, Design Systems & Primitives
-            </p>
+        <section
+      id="interactive-lab"
+      className="relative py-2 px-6 overflow-hidden"
+    >
+      {/* Background grid */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div
+          className="absolute inset-0 opacity-[0.035]"
+          style={{
+            backgroundImage:
+              "linear-gradient(rgba(255,255,255,.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.5) 1px, transparent 1px)",
+            backgroundSize: "40px 40px",
+          }}
+        />
+      </div>
+
+      <div className="relative max-w-7xl mx-auto">
+
+        {/* Header */}
+        <div className="mb-16">
+          <div className="flex items-center gap-3 mb-5">
+            <span className="w-2 h-2 rounded-full bg-orange-500 animate-ping" />
+            <span className="text-xs font-mono tracking-[0.25em] text-white/40">
+              INTERACTION TRACE
+            </span>
           </div>
-          <TiltCard className="p-6 md:p-8">
-            <ReactEcosystemPlayground />
-          </TiltCard>
+
+          <h2 className="text-2xl md:text-6xl font-bold tracking-tight text-center animate-pulse">
+            Interactive Systems{" "}
+            <span className="text-white/30">Lab</span>
+          </h2>
+
+          <p className="mt-6  text-white/50 text-lg leading-relaxed text-center">
+            Small experiments in state, motion, accessibility and UI
+            architecture — where interaction explains what the system is
+            actually doing.
+          </p>
         </div>
-      </section>
+
+        {/* Main playground */}
+        <div className="grid lg:grid-cols-[280px_1fr] gap-6">
+
+          {/* LEFT: Controls */}
+          <div className="rounded-3xl border border-white/10 bg-white/[0.025] backdrop-blur-xl p-4">
+
+            <div className="px-3 py-3 mb-3">
+              <div className="text-[10px] font-mono tracking-[0.2em] text-white/30">
+                EXPERIMENTS
+              </div>
+            </div>
+
+            {[
+              {
+                id: "spring",
+                label: "PHYSICS",
+                title: "Latency & Resilience",
+              },
+              {
+                id: "framer",
+                label: "STATE",
+                title: "Layout & Morphing",
+              },
+              {
+                id: "tailwind",
+                label: "DESIGN",
+                title: "Tokens & Systems",
+              },
+              {
+                id: "radix",
+                label: "ACCESSIBILITY",
+                title: "Focus & Primitives",
+              },
+            ].map((item) => (
+              <button
+                key={item.id}
+                onClick={() => setActiveEngine(item.id as any)}
+                className={`w-full text-left p-4 rounded-2xl mb-2 transition-all duration-300 ${
+                  activeEngine === item.id
+                    ? "bg-white/[0.08] border border-white/10"
+                    : "hover:bg-white/[0.04] border border-transparent"
+                }`}
+              >
+                <div className="text-[9px] font-mono tracking-[0.2em] text-orange-400 mb-1">
+                  {item.label}
+                </div>
+
+                <div className="text-sm font-medium text-white/80">
+                  {item.title}
+                </div>
+              </button>
+            ))}
+
+            {/* Spring controls */}
+            {activeEngine === "spring" && (
+              <div className="mt-6 px-3 space-y-5">
+                <div>
+                  <div className="flex justify-between text-xs mb-2">
+                    <span className="text-white/40">STIFFNESS</span>
+                    <span className="font-mono text-white/60">
+                      {springStiffness}
+                    </span>
+                  </div>
+
+                  <input
+                    type="range"
+                    min="50"
+                    max="400"
+                    value={springStiffness}
+                    onChange={(e) =>
+                      setSpringStiffness(Number(e.target.value))
+                    }
+                    className="w-full accent-orange-400"
+                  />
+                </div>
+
+                <div>
+                  <div className="flex justify-between text-xs mb-2">
+                    <span className="text-white/40">DAMPING</span>
+                    <span className="font-mono text-white/60">
+                      {springDamping}
+                    </span>
+                  </div>
+
+                  <input
+                    type="range"
+                    min="5"
+                    max="40"
+                    value={springDamping}
+                    onChange={(e) =>
+                      setSpringDamping(Number(e.target.value))
+                    }
+                    className="w-full accent-orange-400"
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* RIGHT: Preview */}
+          <div className="rounded-3xl border border-white/10 bg-black/30 overflow-hidden min-h-[620px]">
+
+            {/* Preview header */}
+            <div className="h-14 px-6 border-b border-white/10 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <span className="text-[10px] font-mono text-white/30 tracking-[0.2em]">
+                  LIVE PREVIEW
+                </span>
+
+                <span className="w-1 h-1 rounded-full bg-white/20" />
+
+                <span className="text-[10px] font-mono text-orange-400">
+                  {activeEngine.toUpperCase()}
+                </span>
+              </div>
+
+              <div className="flex gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-red-400/60" />
+                <span className="w-2 h-2 rounded-full bg-yellow-400/60" />
+                <span className="w-2 h-2 rounded-full bg-green-400/60" />
+              </div>
+            </div>
+
+            {/* Canvas */}
+            <div className="p-8 md:p-12 min-h-[565px] flex flex-col">
+
+              {/* ================================================= */}
+              {/* SPRING */}
+              {/* ================================================= */}
+
+              {activeEngine === "spring" && (
+                <>
+                  <div className="mb-10">
+                    <div className="text-xs font-mono text-orange-400 mb-3">
+                      01 / PHYSICS
+                    </div>
+
+                    <h3 className="text-2xl font-semibold">
+                      Latency & Resilience
+                    </h3>
+
+                    <p className="text-sm text-white/40 mt-2 max-w-lg">
+                      A backend request changes state asynchronously. The UI
+                      should communicate that transition instead of snapping
+                      between states.
+                    </p>
+                  </div>
+
+                  <div className="flex-1 flex flex-col items-center justify-center">
+
+                    {/* Pipeline */}
+                    <div className="w-full max-w-2xl grid grid-cols-4 gap-3 mb-16">
+                      {[
+                        ["01", "USER ACTION"],
+                        ["02", "API REQUEST"],
+                        ["03", "PROCESSING"],
+                        ["04", "RESPONSE"],
+                      ].map(([number, label], index) => {
+                        const active =
+                          requestState !== "idle" &&
+                          index <=
+                            ["request", "processing", "response"].indexOf(
+                              requestState
+                            ) + 1;
+
+                        return (
+                          <div
+                            key={label}
+                            className={`p-4 rounded-xl border text-center transition-all duration-500 ${
+                              active
+                                ? "border-orange-400/40 bg-orange-400/[0.06]"
+                                : "border-white/10 bg-white/[0.02]"
+                            }`}
+                          >
+                            <div className="text-[9px] font-mono text-white/30 mb-2">
+                              {number}
+                            </div>
+
+                            <div
+                              className={`text-[9px] font-mono ${
+                                active
+                                  ? "text-orange-300"
+                                  : "text-white/30"
+                              }`}
+                            >
+                              {label}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    {/* Spring object */}
+                    <motion.div
+                      style={{
+                        scale: springScale,
+                        rotate: springRotate,
+                      }}
+                      className="w-20 h-20 rounded-2xl border border-orange-400/50 bg-orange-400/10 flex items-center justify-center"
+                    >
+                      <div className="w-5 h-5 rounded-full bg-orange-400 shadow-[0_0_35px_rgba(251,146,60,.7)]" />
+                    </motion.div>
+
+                    <button
+                      onClick={triggerRequest}
+                      disabled={requestState !== "idle"}
+                      className="mt-16 px-6 py-3 rounded-xl bg-white text-black text-sm font-medium hover:bg-white/90 disabled:opacity-40 transition"
+                    >
+                      {requestState === "idle"
+                        ? "Simulate Request"
+                        : stateLabels[requestState]}
+                    </button>
+                  </div>
+
+                  <div className="mt-8 pt-5 border-t border-white/10">
+                    <div className="font-mono text-xs text-white/30">
+                      UI STATE
+                    </div>
+
+                    <div className="mt-2 text-sm text-white/60">
+                      “The interface should feel responsive even when the
+                      system isn't instantaneous.”
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {/* ================================================= */}
+              {/* FRAMER */}
+              {/* ================================================= */}
+
+              {activeEngine === "framer" && (
+                <>
+                  <div className="mb-10">
+                    <div className="text-xs font-mono text-cyan-400 mb-3">
+                      02 / STATE
+                    </div>
+
+                    <h3 className="text-2xl font-semibold">
+                      Layout & Morphing
+                    </h3>
+
+                    <p className="text-sm text-white/40 mt-2 max-w-lg">
+                      The same data can occupy different UI states. Layout
+                      animation handles the transition without manually
+                      calculating positions.
+                    </p>
+                  </div>
+
+                  <div className="flex-1 flex items-center justify-center">
+
+                    <motion.div
+                      layout
+                      transition={{
+                        type: "spring",
+                        stiffness: 260,
+                        damping: 24,
+                      }}
+                      className={`rounded-3xl border border-cyan-400/20 bg-cyan-400/[0.04] p-6 ${
+                        layoutExpanded
+                          ? "w-full max-w-2xl"
+                          : "w-72"
+                      }`}
+                    >
+                      <motion.div layout className="flex items-start gap-4">
+                        <motion.div
+                          layout
+                          className="w-12 h-12 rounded-xl bg-cyan-400/10 border border-cyan-400/30 flex items-center justify-center shrink-0"
+                        >
+                          <div className="w-3 h-3 rounded-full bg-cyan-400" />
+                        </motion.div>
+
+                        <div className="flex-1">
+                          <motion.div
+                            layout
+                            className="text-sm font-medium"
+                          >
+                            Cloud Processing Job
+                          </motion.div>
+
+                          <motion.div
+                            layout
+                            className="text-xs text-white/30 mt-1"
+                          >
+                            ID: JOB-2048
+                          </motion.div>
+                        </div>
+                      </motion.div>
+
+                      <AnimatePresence>
+                        {layoutExpanded && (
+                          <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: "auto" }}
+                            exit={{ opacity: 0, height: 0 }}
+                            className="mt-6 pt-6 border-t border-white/10 space-y-3"
+                          >
+                            {[
+                              ["STATUS", "PROCESSING"],
+                              ["WORKERS", "04"],
+                              ["LATENCY", "184ms"],
+                              ["THROUGHPUT", "1.8k/s"],
+                            ].map(([key, value]) => (
+                              <div
+                                key={key}
+                                className="flex justify-between font-mono text-xs"
+                              >
+                                <span className="text-white/30">
+                                  {key}
+                                </span>
+
+                                <span className="text-cyan-300">
+                                  {value}
+                                </span>
+                              </div>
+                            ))}
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </motion.div>
+                  </div>
+
+                  <button
+                    onClick={() => setLayoutExpanded((v) => !v)}
+                    className="mx-auto mt-8 px-6 py-3 rounded-xl border border-white/10 hover:bg-white/[0.05] text-sm transition"
+                  >
+                    {layoutExpanded
+                      ? "Collapse State"
+                      : "Expand State"}
+                  </button>
+
+                  <div className="mt-8 pt-5 border-t border-white/10">
+                    <div className="font-mono text-xs text-white/30">
+                      ENGINEERING IDEA
+                    </div>
+
+                    <div className="mt-2 text-sm text-white/60">
+                      Same data. Different UI state. Zero manual position
+                      calculations.
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {/* ================================================= */}
+              {/* TAILWIND */}
+              {/* ================================================= */}
+
+              {activeEngine === "tailwind" && (
+                <>
+                  <div className="mb-10">
+                    <div className="text-xs font-mono text-emerald-400 mb-3">
+                      03 / DESIGN SYSTEM
+                    </div>
+
+                    <h3 className="text-2xl font-semibold">
+                      Tokens & Systems
+                    </h3>
+
+                    <p className="text-sm text-white/40 mt-2 max-w-lg">
+                      A design system isn't a collection of colors. Change
+                      one token and the entire interface responds.
+                    </p>
+                  </div>
+
+                  <div className="flex-1 flex flex-col justify-center max-w-2xl mx-auto w-full">
+
+                    {/* Theme selector */}
+                    <div className="flex gap-3 mb-10">
+                      {Object.keys(accentMap).map((accent) => (
+                        <button
+                          key={accent}
+                          onClick={() => setThemeAccent(accent)}
+                          className={`px-4 py-2 rounded-lg border text-xs capitalize transition ${
+                            themeAccent === accent
+                              ? "border-white/30 bg-white/10"
+                              : "border-white/10 text-white/40"
+                          }`}
+                        >
+                          {accent}
+                        </button>
+                      ))}
+                    </div>
+
+                    {/* Mini application */}
+                    <div className="rounded-2xl border border-white/10 bg-white/[0.025] p-6">
+
+                      <div className="flex items-center justify-between mb-8">
+                        <div>
+                          <div className="text-sm font-medium">
+                            Deployment Health
+                          </div>
+
+                          <div className="text-xs text-white/30 mt-1">
+                            Production / API cluster
+                          </div>
+                        </div>
+
+                        <div
+                          className={`w-10 h-10 rounded-xl bg-gradient-to-br ${accentMap[themeAccent]} opacity-80`}
+                        />
+                      </div>
+
+                      <div className="space-y-5">
+
+                        <div>
+                          <div className="flex justify-between text-xs mb-2">
+                            <span className="text-white/40">
+                              CPU
+                            </span>
+
+                            <span className="font-mono">
+                              68%
+                            </span>
+                          </div>
+
+                          <div className="h-2 rounded-full bg-white/5 overflow-hidden">
+                            <motion.div
+                              animate={{ width: `${progress}%` }}
+                              transition={{
+                                duration: 0.6,
+                                ease: "easeOut",
+                              }}
+                              className={`h-full rounded-full bg-gradient-to-r ${accentMap[themeAccent]}`}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-3 gap-3">
+                          {[
+                            ["99.98%", "UPTIME"],
+                            ["184ms", "LATENCY"],
+                            ["1.8k/s", "THROUGHPUT"],
+                          ].map(([value, label]) => (
+                            <div
+                              key={label}
+                              className="rounded-xl bg-white/[0.03] p-4"
+                            >
+                              <div className="font-mono text-sm">
+                                {value}
+                              </div>
+
+                              <div className="text-[9px] text-white/30 mt-1">
+                                {label}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={runProgress}
+                      className="mt-6 self-center px-5 py-2.5 rounded-xl border border-white/10 text-xs hover:bg-white/[0.05] transition"
+                    >
+                      Run System Update
+                    </button>
+                  </div>
+
+                  <div className="mt-8 pt-5 border-t border-white/10">
+                    <div className="font-mono text-xs text-white/30">
+                      DESIGN SYSTEM
+                    </div>
+
+                    <div className="mt-2 text-sm text-white/60">
+                      One token changes the visual language of the entire
+                      interface.
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {/* ================================================= */}
+              {/* RADIX */}
+              {/* ================================================= */}
+
+              {activeEngine === "radix" && (
+                <>
+                  <div className="mb-10">
+                    <div className="text-xs font-mono text-violet-400 mb-3">
+                      04 / ACCESSIBILITY
+                    </div>
+
+                    <h3 className="text-2xl font-semibold">
+                      Focus & Primitives
+                    </h3>
+
+                    <p className="text-sm text-white/40 mt-2 max-w-lg">
+                      Accessibility isn't a final styling pass. Interaction
+                      state should exist at the primitive level.
+                    </p>
+                  </div>
+
+                  <div className="flex-1 flex flex-col items-center justify-center">
+
+                    <div className="w-full max-w-xl rounded-2xl border border-white/10 bg-white/[0.02] p-6">
+
+                      <div className="text-[10px] font-mono text-white/30 mb-5">
+                        KEYBOARD INTERACTION TRACE
+                      </div>
+
+                      <div className="space-y-3">
+
+                        {[
+                          ["TAB", "Focus Manager"],
+                          ["↓", "Focusable Primitive"],
+                          ["ENTER", "Interaction"],
+                          [":focus-visible", "Accessible UI"],
+                        ].map(([key, value], index) => (
+                          <motion.div
+                            key={key}
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={{
+                              opacity: 1,
+                              x: 0,
+                            }}
+                            transition={{
+                              delay: index * 0.12,
+                            }}
+                            className="flex items-center gap-4 p-4 rounded-xl border border-white/10 bg-black/20"
+                          >
+                            <div className="min-w-24">
+                              <span className="px-2 py-1 rounded-md bg-violet-400/10 border border-violet-400/20 text-[9px] font-mono text-violet-300">
+                                {key}
+                              </span>
+                            </div>
+
+                            <div className="text-xs text-white/50">
+                              →
+                            </div>
+
+                            <div className="text-sm text-white/70">
+                              {value}
+                            </div>
+                          </motion.div>
+                        ))}
+
+                      </div>
+                    </div>
+
+                    {/* Actual focusable controls */}
+                    <div className="flex gap-3 mt-8">
+
+                      <button className="px-5 py-3 rounded-xl border border-white/10 text-sm hover:bg-white/[0.05] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 transition">
+                        Button
+                      </button>
+
+                      <button className="px-5 py-3 rounded-xl border border-white/10 text-sm hover:bg-white/[0.05] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 transition">
+                        Another Button
+                      </button>
+
+                      <button className="px-5 py-3 rounded-xl border border-white/10 text-sm hover:bg-white/[0.05] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 transition">
+                        Focus Me
+                      </button>
+
+                    </div>
+                  </div>
+
+                  <div className="mt-8 pt-5 border-t border-white/10">
+                    <div className="font-mono text-xs text-white/30">
+                      ARCHITECTURE
+                    </div>
+
+                    <div className="mt-2 text-sm text-white/60">
+                      Interaction state is part of the architecture — not
+                      decoration.
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Engineering trace */}
+        {/* <div className="mt-6 grid md:grid-cols-4 gap-3">
+
+          {[
+            ["STATE", "Event → State → UI"],
+            ["MOTION", "Physics → Perception"],
+            ["SYSTEM", "Token → Components"],
+            ["A11Y", "Input → Focus → Action"],
+          ].map(([title, description]) => (
+            <div
+              key={title}
+              className="rounded-2xl border border-white/10 bg-white/[0.02] p-5"
+            >
+              <div className="text-[9px] font-mono text-white/30 tracking-[0.2em]">
+                {title}
+              </div>
+
+              <div className="mt-2 text-xs text-white/60">
+                {description}
+              </div>
+            </div>
+          ))}
+        </div> */}
+      </div>
+    </section>
 
       {/* --- FLAGSHIP INTERACTIVE PROJECT LAB --- */}
-      <section
+      {/* <section
         id="interactive-lab"
         className="py-20 md:py-28 px-4 bg-slate-950/70 border-b border-white/10 relative z-10"
       >
@@ -1424,7 +2118,6 @@ function MyProfile() {
             </p>
           </div>
 
-          {/* Project Switcher */}
           <div className="flex flex-wrap justify-center gap-3">
             {[
               {
@@ -1463,7 +2156,6 @@ function MyProfile() {
             ))}
           </div>
 
-          {/* Simulator Display */}
           <div className="max-w-4xl mx-auto">
             <TiltCard className="p-6 md:p-10 border-orange-500/30">
               {activeLabTab === "saarthi" && <SaarthiSimulator />}
@@ -1473,7 +2165,7 @@ function MyProfile() {
             </TiltCard>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* --- TECHNICAL ARSENAL --- */}
       <section id="skills" className="py-20 md:py-28 px-4 relative z-10">
@@ -1490,7 +2182,8 @@ function MyProfile() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {Object.entries(skills).map(([category, items], idx) => (
               <TiltCard key={idx} className="p-6 md:p-8">
-                <div className="w-12 h-12 bg-[#FF8A00]/10 border border-[#FF8A00]/20 rounded-2xl flex items-center justify-center text-[#FF8A00] mb-6">
+                <div className="w-12 h-12 max-h-2xl bg-[#FF8A00]/10 border border-[#FF8A00]/20 rounded-2xl flex 
+                items-center justify-center text-[#FF8A00] mb-6">
                   {idx === 0 && <Code size={24} />}
                   {idx === 1 && <Layers size={24} />}
                   {idx === 2 && <Cpu size={24} />}
@@ -1570,7 +2263,7 @@ function MyProfile() {
       </section>
 
       {/* --- CYBER TERMINAL SECTION --- */}
-      <section className="py-20 md:py-24 px-4 relative z-10">
+      {/* <section className="py-20 md:py-24 px-4 relative z-10">
         <div className="max-w-4xl mx-auto">
           <TiltCard className="p-6 md:p-8 font-mono border-orange-500/30">
             <div className="flex items-center justify-between border-b border-white/10 pb-4 mb-4">
@@ -1622,7 +2315,7 @@ function MyProfile() {
             </form>
           </TiltCard>
         </div>
-      </section>
+      </section> */}
 
       {/* --- EDUCATION --- */}
       <section id="education" className="py-16 md:py-20 px-4 relative z-10">
@@ -1640,7 +2333,7 @@ function MyProfile() {
                   Computer Engineering
                 </p>
                 <p className="text-xs text-[#FF8A00] font-mono font-bold mt-1">
-                  Institute of Engineering and Technology, Indore (2015 – 2019)
+                  Institute of Engineering and Technology, DAVV, Indore (2015 – 2019)
                 </p>
               </div>
             </div>
